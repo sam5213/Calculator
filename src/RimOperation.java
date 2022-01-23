@@ -2,14 +2,14 @@ import java.util.NoSuchElementException;
 
 class RimOperation extends Operation{
 
-    public RimOperation(int number1, int number2) {
+    public RimOperation(Number number1, Number number2) {
         super(number1, number2);
     }
 
-    public static boolean isCorrectNumber(String member) {
+    public static boolean isNumeric(String member) {
         try {
-            RimNumbers.valueOf(member);
-        } catch (IllegalArgumentException ex) {
+            Integer.parseInt(member);
+        } catch (NumberFormatException ex) {
             return false;
         }
         return true;
@@ -37,9 +37,15 @@ class RimOperation extends Operation{
 
     public static String convertToRim(int num) {
         if (num / 10 == 0) {
-            return getRimNumber(num);
+            return (getRimNumber(num));
         } else {
             return "X" + getRimNumber(num - 10);
         }
+    }
+
+    public String calculate(String sign) throws Exception {
+        String result = super.calculate(sign);
+        int num = Integer.parseInt(result);
+        return convertToRim(num);
     }
 }

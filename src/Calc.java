@@ -3,24 +3,15 @@ import java.util.Scanner;
 public class Calc {
     public static final int OPERAND_COUNT = 3;
 
-    public static boolean isNumeric(String member) {
-        try {
-            Integer.parseInt(member);
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-        return true;
+    public static Number getValidNumber(String number) throws Exception {
+        if (RimOperation.isNumeric(number)) {
+            int arabicNumber = Integer.parseInt(number);
+            return new Number(arabicNumber, Notation.ARABIC);
+        } else if (ArabicOperation.isArabic(number)) {
+            int rimNumber = RimOperation.parseRimNumber(number);
+            return new Number(rimNumber, Notation.ROMAN);
+        } else throw new Exception("Калькулятор принимает на вход арабские и римские числа");
     }
-
-    public static boolean isArabic(String member) {
-        try {
-            RimNumbers.valueOf(member);
-        } catch (IllegalArgumentException ex) {
-            return false;
-        }
-        return true;
-    }
-
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -28,33 +19,25 @@ public class Calc {
         String expression = scanner.nextLine();
 
         String[] membersExpression = expression.split("\\s+");
-        int num1, num2;
+        Operation operations;
 
         try {
             if (membersExpression.length == OPERAND_COUNT) {
-                String numString1 = membersExpression[0];
-                String numString2 = membersExpression[2];
 
-                if (isNumeric(numString1) && isNumeric(numString2)) {
+                Number number1 = getValidNumber(membersExpression[0]);
+                Number number2 = getValidNumber(membersExpression[2]);
 
-                    num1 = Integer.parseInt(numString1);
-                    num2 = Integer.parseInt(numString2);
+                if (number1.getNotationValue() == Notation.ARABIC && number2.getNotationValue() == Notation.ARABIC) {
+                    operations = new ArabicOperation(number1, number2);
 
-                    Operation operations = new Operation(num1, num2);
-                    int result = operations.recognizeSign(membersExpression[1]);
-                    System.out.println(result);
-
-                } else if (isArabic(numString1) && isArabic(numString2)) {
-                    num1 = RimOperation.parseRimNumber(numString1);
-                    num2 = RimOperation.parseRimNumber(numString2);
-
-                    Operation operations = new Operation(num1, num2);
-                    int result = operations.recognizeSign(membersExpression[1]);
-                    System.out.println(RimOperation.convertToRim(result));
-
+                } else if (number1.getNotationValue() == Notation.ROMAN && number2.getNotationValue() == Notation.ROMAN) {
+                    operations = new RimOperation(number1, number2);
                 } else {
                     throw new Exception("используются одновременно разные системы счисления");
                 }
+
+                String result = operations.calculate(membersExpression[1]);
+                System.out.println(result);
 
             } else if (membersExpression.length > OPERAND_COUNT) {
                 throw new Exception("формат математической операции не удовлетворяет заданию - " +

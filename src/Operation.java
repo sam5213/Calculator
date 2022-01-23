@@ -1,41 +1,53 @@
 public class Operation {
 
-    private Integer number1;
-    private Integer number2;
+    private Number number1;
+    private Number number2;
 
-    public Operation(int a, int b) {
-        number1 = a;
-        number2 = b;
+    public Operation(Number number1, Number number2) {
+        this.number1 = number1;
+        this.number2 = number2;
     }
 
-    private int add(Integer number1, Integer number2) {
-        return number1 + number2;
+    private Number add(Number number1, Number number2) {
+        int result = number1.getValue() + number2.getValue();
+        return new Number(result);
     }
 
-    private int minus(Integer number1, Integer number2) {
-        return number1 - number2;
+    private Number minus(Number number1, Number number2) {
+        int result = number1.getValue() - number2.getValue();
+        return new Number(result);
     }
 
-    private int multiple(Integer number1, Integer number2) {
-        return number1 * number2;
+    private Number multiple(Number number1, Number number2) {
+        int result = number1.getValue() * number2.getValue();
+        return new Number(result);
     }
 
-    private int divide(Integer number1, Integer number2) {
-        return number1 / number2;
+    private Number divide(Number number1, Number number2) {
+        int result = number1.getValue() / number2.getValue();
+        return new Number(result);
     }
 
-    public int recognizeSign(String sign) throws Exception{
+    public String calculate(String sign) throws Exception{
+        Number result;
+
         switch (sign) {
             case "+":
-                return add(number1, number2);
+                result = add(number1, number2);
+                break;
             case "-":
-                return minus(number1, number2);
+                result = minus(number1, number2);
+                break;
             case "*":
-                return multiple(number1, number2);
+                result = multiple(number1, number2);
+                break;
             case "/":
-                return divide(number1, number2);
+                result = divide(number1, number2);
+                break;
             default:
                 throw new Exception("Калькулятор умеет выполнять операции +, -, * и / ");
         }
+
+        return String.valueOf(result.getValue());
     }
 }
