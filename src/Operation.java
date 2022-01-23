@@ -45,7 +45,7 @@ public class Operation {
                 result = divide(number1, number2);
                 break;
             default:
-                throw new Exception("Калькулятор умеет выполнять операции +, -, * и / ");
+                throw new IllegalOperationException("Калькулятор умеет выполнять операции +, -, * и / ");
         }
 
         return String.valueOf(result.getValue());

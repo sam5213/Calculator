@@ -1,5 +1,3 @@
-import java.util.NoSuchElementException;
-
 class RimOperation extends Operation{
 
     public RimOperation(Number number1, Number number2) {
@@ -15,27 +13,27 @@ class RimOperation extends Operation{
         return true;
     }
 
-    public static int parseRimNumber(String rim) {
+    public static int parseRimNumber(String rim) throws CountOutOfBoundsException {
         for (RimNumbers number : RimNumbers.values()) {
             if (number.name().equals(rim)) {
                 return number.getNum();
             }
         }
-        throw new NoSuchElementException(
+        throw new CountOutOfBoundsException(
                 "не является римским числом в диапозоне от 1 до 10 : " + rim);
     }
 
-    private static String getRimNumber(int num) {
+    private static String getRimNumber(int num) throws IllegalOperandException {
         for (RimNumbers number : RimNumbers.values()) {
             if (number.getNum() == num) {
                 return number.name();
             }
         }
-        throw new NoSuchElementException(
+        throw new IllegalOperandException(
                 "не является положительным римским числом : " + num);
     }
 
-    public static String convertToRim(int num) {
+    public static String convertToRim(int num) throws RimExpressionException{
         if (num / 10 == 0) {
             return (getRimNumber(num));
         } else {
