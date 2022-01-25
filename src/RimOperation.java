@@ -23,22 +23,22 @@ class RimOperation extends Operation{
                 "не является римским числом в диапозоне от 1 до 10 : " + rim);
     }
 
-    private static String getRimNumber(int num) throws IllegalOperandException {
-        for (RimNumbers number : RimNumbers.values()) {
-            if (number.getNum() == num) {
-                return number.name();
+    public static String convertToRim(int num) throws IllegalOperandException {
+        if (num <= 0) {
+            throw new IllegalOperandException(
+                    "не является положительным римским числом : " + num);
+        }
+
+        String result = "";
+        int[] roman_value_list = new int[]{100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] roman_char_list = new String[]{"C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        for (int i = 0; i < roman_value_list.length; i++) {
+            while (num >= roman_value_list[i]) {
+                num -= roman_value_list[i];
+                result += roman_char_list[i];
             }
         }
-        throw new IllegalOperandException(
-                "не является положительным римским числом : " + num);
-    }
-
-    public static String convertToRim(int num) throws RimExpressionException{
-        if (num / 10 == 0) {
-            return (getRimNumber(num));
-        } else {
-            return "X" + getRimNumber(num - 10);
-        }
+        return result;
     }
 
     public String calculate(String sign) throws Exception {
